@@ -29,7 +29,6 @@ let snakeHead = snake[0];
 let snakeTail = { x: snakeHead.x, y: snakeHead.y };
 let foodPosition = { x: Math.floor(Math.random() * 10), y: Math.floor(Math.random() * 10) };
 
-let direction = "right";
 let turningPoints = [];
 
 let speed = 500; // time needed for 1 move
@@ -114,13 +113,13 @@ function move() {
     snakeTail.y = snake[snake.length - 1].y;
 
     for (let i = 0; i < snake.length; i++) {
-        if (direction === "right") {
+        if (snake[i].direction === "right") {
             snake[i].y += 1;
-        } else if (direction === "left") {
+        } else if (snake[i].direction === "left") {
             snake[i].y -= 1;
-        } else if (direction === "up") {
+        } else if (snake[i].direction === "up") {
             snake[i].x -= 1;
-        } else if (direction === "down") {
+        } else if (snake[i].direction === "down") {
             snake[i].x += 1;
         }
     }
@@ -168,22 +167,22 @@ function setupKeyBoardEvt() {
         switch (e.code) {
             case "KeyW":
             case "ArrowUp":
-                direction = "up";
+                snakeHead.direction = "up";
                 break;
 
             case "KeyS":
             case "ArrowDown":
-                direction = "down";
+                snakeHead.direction = "down";
                 break;
 
             case "KeyA":
             case "ArrowLeft":
-                direction = "left";
+                snakeHead.direction = "left";
                 break;
 
             case "KeyD":
             case "ArrowRight":
-                direction = "right";
+                snakeHead.direction = "right";
                 break;
 
             default:
@@ -195,7 +194,7 @@ function setupKeyBoardEvt() {
 // Click event
 function setupClickEvt() {
     function changeDirectionOnClick(arrowDirection) {
-        direction = arrowDirection;
+        snakeHead.direction = arrowDirection;
     };
 
     upArrow.addEventListener("click", () => changeDirectionOnClick("up"));
@@ -253,7 +252,6 @@ function restartGame() {
     snakeHead = snake[0];
     snakeTail = { x: snakeHead.x, y: snakeHead.y };
     foodPosition = { x: Math.floor(Math.random() * 10), y: Math.floor(Math.random() * 10) };
-    direction = "right";
     score = 0;
     gameOver = false;
 

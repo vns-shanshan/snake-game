@@ -5,13 +5,15 @@
 body {
     margin: 0 auto;
     min-height: 100dvh;
-    font-family: system-ui, san-serif;
+    font-family: system-ui, sans-serif;
     font-size: 24px;
     background-color: #AAB396;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
+
+/* ------------ Header --------------------*/
 
 header {
     display: flex;
@@ -29,15 +31,47 @@ header {
     opacity: 0.8;
 }
 
+/* ------------ ----------------------------- */
+
+/* ------------ Main --------------------*/
+
 main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 1rem;
+}
+
+.game-over-section {
+    visibility: hidden;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
 }
 
 #message {
-    display: none;
+    color: #674636;
+    font-weight: 700;
+}
+
+#restart-btn {
+    background-color: #FAEDCE;
+    color: #674636;
+    border: none;
+    border-radius: 8px;
+    padding: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+#restart-btn:hover {
+    background-color: transparent;
+    color: #FAEDCE;
+    border: 2px solid #674636;
+    border-radius: 8px;
+    padding: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
 }
 
 .game-board {
@@ -52,6 +86,9 @@ td {
     height: 2rem;
     width: 2rem;
     border: 2px solid #FAEDCE;
+    font-size: 1rem;
+    text-align: center;
+    padding: 0;
 }
 
 .game-control {
@@ -80,28 +117,7 @@ td {
     font-size: 1.5rem;
 }
 
-.restart-btn-area {
-    margin-top: 2rem;
-}
-
-#restart-btn {
-    display: none;
-    background-color: #FAEDCE;
-    color: #674636;
-    border: none;
-    border-radius: 8px;
-    padding: 12px;
-    font-size: 1.25rem;
-}
-
-#restart-btn:hover {
-    background-color: transparent;
-    color: #FAEDCE;
-    border: 2px solid #674636;
-    border-radius: 8px;
-    padding: 12px;
-    font-size: 1.25rem;
-}
+/* ------------ ----------------------------- */
 
 @media (min-width: 481px) and (max-width: 767px) {
     .game-board {
