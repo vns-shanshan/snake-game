@@ -29,6 +29,7 @@ let snakeHead = snake[0];
 let snakeTail = { x: snakeHead.x, y: snakeHead.y, direction: snakeHead.direction };
 let foodPosition = { x: Math.floor(Math.random() * 10), y: Math.floor(Math.random() * 10) };
 
+// [{x, y, direction: str}...]
 let turningPoints = [];
 
 let speed = 500; // time needed for 1 move
@@ -111,6 +112,28 @@ function insertData() {
 function move() {
     snakeTail.x = snake[snake.length - 1].x;
     snakeTail.y = snake[snake.length - 1].y;
+    snakeTail.direction = snake[snake.length - 1].direction;
+
+    let shouldRemoveFirstTurningPoint = false;
+    for (let i = 0; i < snake.length; i++) {
+        for (let j = 0; j < turningPoints.length; j++) {
+            const snakePart = snake[i];
+            if (snakePart.x === turningPoints[j].x
+                && snakePart.y === turningPoints[j].y
+            ) {
+                snakePart.direction = turningPoints[j].direction;
+
+                if (i === snake.length - 1) {
+                    shouldRemoveFirstTurningPoint = true;
+                }
+            }
+        }
+    }
+
+    if (shouldRemoveFirstTurningPoint) {
+        turningPoints.shift();
+    }
+
 
     for (let i = 0; i < snake.length; i++) {
         if (snake[i].direction === "right") {
@@ -122,6 +145,8 @@ function move() {
         } else if (snake[i].direction === "down") {
             snake[i].x += 1;
         }
+
+
     }
 
     // Check if snake has eaten the food
@@ -144,12 +169,7 @@ function render() {
     for (let i = 0; i < gameBoard.length; i++) {
         for (let j = 0; j < gameBoard[i].length; j++) {
             const cell = document.getElementById(`${i}-${j}`);
-            try {
-                cell.innerText = gameBoard[i][j];
-            } catch (error) {
-                console.log(i, j)
-            }
-
+            cell.innerText = gameBoard[i][j];
         }
     }
 
@@ -169,29 +189,46 @@ function checkGameOver() {
 // Keyboard event
 function setupKeyBoardEvt() {
     document.addEventListener("keydown", function (e) {
+        let newDir = undefined;
+        let isOppositeDir = false;
         switch (e.code) {
             case "KeyW":
             case "ArrowUp":
-                snakeHead.direction = "up";
+                newDir = "up";
+                isOppositeDir = snakeHead.direction === "down";
                 break;
 
             case "KeyS":
             case "ArrowDown":
-                snakeHead.direction = "down";
+                newDir = "down";
+                isOppositeDir = snakeHead.direction === "up";
                 break;
 
             case "KeyA":
             case "ArrowLeft":
-                snakeHead.direction = "left";
+                newDir = "left";
+                isOppositeDir = snakeHead.direction === "right";
                 break;
 
             case "KeyD":
             case "ArrowRight":
-                snakeHead.direction = "right";
+                newDir = "right";
+                isOppositeDir = snakeHead.direction === "left";
                 break;
 
             default:
                 break;
+        }
+        if (newDir !== snakeHead.direction && !isOppositeDir) {
+            turningPoints.push({
+                x: snakeHead.x,
+                y: snakeHead.y,
+                direction: newDir,
+            });
+        }
+
+        if (!isOppositeDir) {
+            snakeHead.direction = newDir;
         }
     })
 }
