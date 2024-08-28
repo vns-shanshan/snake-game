@@ -73,7 +73,6 @@ function init() {
     setupKeyBoardEvt();
     setupClickEvt();
     play();
-
 }
 init();
 
@@ -103,7 +102,7 @@ function insertData() {
     // insert snake head
     // gameBoard[snakeHead.x][snakeHead.y] = "🐍";
 
-    // insert snake (Hint: for loop)
+    // insert snake 
     for (let i = 0; i < snake.length; i++) {
         gameBoard[snake[i].x][snake[i].y] = "🐍";
     }
@@ -273,8 +272,10 @@ function addNewFood() {
     foodPosition.y = newY;
 }
 
+// Need to Change
 function snakeGrow() {
     let newTailPosition = { x: snakeTail.x, y: snakeTail.y, direction: snakeTail.direction };
+    // using unshift
     snake.push(newTailPosition);
 }
 

@@ -7,7 +7,7 @@ body {
     min-height: 100dvh;
     font-family: system-ui, sans-serif;
     font-size: 24px;
-    background-color: #AAB396;
+    background-color: #E8B86D;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -68,10 +68,10 @@ main {
     background-color: transparent;
     color: #FAEDCE;
     border: 2px solid #674636;
-    border-radius: 8px;
-    padding: 8px;
-    font-size: 0.8rem;
-    font-weight: 700;
+}
+
+.game-board-container {
+    position: relative;
 }
 
 .game-board {
@@ -80,6 +80,7 @@ main {
     border: 4px solid #FAEDCE;
     border-radius: 8px;
     border-spacing: 0;
+    table-layout: fixed;
 }
 
 td {
@@ -89,6 +90,43 @@ td {
     font-size: 1rem;
     text-align: center;
     padding: 0;
+}
+
+.start-page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.start-page h1 {
+    color: #FAEDCE;
+}
+
+.hidden {
+    display: none;
+}
+
+#start-btn {
+    background-color: #FAEDCE;
+    color: #674636;
+    border: none;
+    border-radius: 8px;
+    padding: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+#start-btn:hover {
+    background-color: transparent;
+    color: #FAEDCE;
+    border: 2px solid #674636;
 }
 
 .game-control {
@@ -117,7 +155,13 @@ td {
     font-size: 1.5rem;
 }
 
+.direction-btn:active {
+    background-color: #573b2d;
+}
+
 /* ------------ ----------------------------- */
+
+/* --------------------- Media Query --------------- */
 
 @media (min-width: 481px) and (max-width: 767px) {
     .game-board {
@@ -155,3 +199,4 @@ td {
     }
 }
 
+/* ------------ ----------------------------- */

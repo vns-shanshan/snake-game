@@ -1,5 +1,3 @@
-// console.log("Hello")
-
 // --------------- User Requirements ------------------ 
 /*
 Basic
@@ -23,25 +21,34 @@ As a user, I want to see a restart button displayed under the “Game Over” me
 // ------------------- -- - ------------------------------
 
 //1) Define the required variables used to track the state of the game.
+let gameStarted = false;
+
 const gameBoard = new Array(10).fill(null).map(() => new Array(10).fill(""));
-let snake = [{ x: Math.floor(Math.random() * 10), y: Math.floor(Math.random() * 10), direction: "right" }];
-let snakeHead = snake[0];
-let snakeTail = { x: snakeHead.x, y: snakeHead.y, direction: snakeHead.direction };
+
+const initAvoidPositions = [{ x: 0, y: 9 }, { x: 1, y: 9 }, { x: 2, y: 9 }, { x: 3, y: 9 },
+{ x: 4, y: 9 }, { x: 5, y: 9 }, { x: 6, y: 9 }, { x: 7, y: 9 }, { x: 8, y: 9 },
+{ x: 9, y: 9 }];
+let snake = getSnakeInitPosition();
+let snakeHead = { ...snake[0] };
+
+
 let foodPosition = { x: Math.floor(Math.random() * 10), y: Math.floor(Math.random() * 10) };
 
-let turningPointToAdd;
-// [{x, y, direction: str}...]
-let turningPoints = [];
-
 let speed = 500; // time needed for 1 move
-
 let score = 0;
-
 let gameOver = false;
+let isMuted = false;
+
+let userInteracted = false;
+
+//1.5) Load sounds
+const eatingSound = new Audio("../assets/audio/eating.mp3");
+const hitWallSound = new Audio("../assets/audio/hit-wall.mp3")
 
 //2) Store cached element references.
+const startPageEl = document.querySelector(".start-page")
+const startBtnEl = document.getElementById("start-btn");
 const gameBoardEl = document.querySelector("#game-board-body");
-
 const scoreEl = document.querySelector("#score");
 const messageEl = document.getElementById("message");
 const restartBtnEl = document.getElementById("restart-btn");
@@ -51,7 +58,29 @@ const downArrow = document.getElementById("down-arrow");
 const leftArrow = document.getElementById("left-arrow");
 const rightArrow = document.getElementById("right-arrow");
 
+const volume = document.getElementById("volume");
 //3) Upon loading, the game state should be initialized, and a function should be called to render this game state.
+
+startBtnEl.addEventListener("click", () => {
+    gameStarted = true;
+    startPageEl.classList.add("hidden");
+
+    init();
+});
+
+function init() {
+    if (gameStarted) {
+        drawGameBoard();
+        insertData();
+        render();
+        setupKeyBoardEvt();
+        setupClickEvt();
+        volume.addEventListener("click", toggleSound);
+        playGame();
+    }
+}
+
+
 function drawGameBoard() {
     for (let i = 0; i < gameBoard.length; i++) {
         let rowStr = "<tr>";
@@ -66,18 +95,40 @@ function drawGameBoard() {
     }
 }
 
-function init() {
-    drawGameBoard();
-    insertData();
-    render();
-    setupKeyBoardEvt();
-    setupClickEvt();
-    play();
+function getSnakeInitPosition() {
+    let snakePosition;
 
+    while (true) {
+        snakePosition = { x: Math.floor(Math.random() * 10), y: Math.floor(Math.random() * 10), direction: "right" }
+
+        let isAvoided = false;
+        for (let i = 0; i < initAvoidPositions.length; i++) {
+            if (snakePosition.x === initAvoidPositions[i].x && snakePosition.y === initAvoidPositions[i].y) {
+                isAvoided = true;
+                break;
+            }
+        }
+
+        if (!isAvoided) {
+            return [snakePosition];
+        }
+
+    }
 }
-init();
 
-function play() {
+function insertData() {
+    // insert food
+    gameBoard[foodPosition.x][foodPosition.y] = "🟥";
+
+    // insert snake 
+    for (let i = 0; i < snake.length; i++) {
+        gameBoard[snake[i].x][snake[i].y] = "🟩";
+    }
+}
+
+function playGame() {
+    if (!gameStarted) return;
+
     const gameLoop = setInterval(() => {
         move();
         checkGameOver();
@@ -96,74 +147,96 @@ function play() {
     }, speed);
 }
 
-function insertData() {
-    // insert food
-    gameBoard[foodPosition.x][foodPosition.y] = "🐭";
-
-    // insert snake head
-    // gameBoard[snakeHead.x][snakeHead.y] = "🐍";
-
-    // insert snake (Hint: for loop)
-    for (let i = 0; i < snake.length; i++) {
-        gameBoard[snake[i].x][snake[i].y] = "🐍";
-    }
-}
-
-// Move snake
-function move() {
-    snakeTail.x = snake[snake.length - 1].x;
-    snakeTail.y = snake[snake.length - 1].y;
-    snakeTail.direction = snake[snake.length - 1].direction;
-
-    let shouldRemoveFirstTurningPoint = false;
-    for (let i = 0; i < snake.length; i++) {
-        for (let j = 0; j < turningPoints.length; j++) {
-            const snakePart = snake[i];
-            if (snakePart.x === turningPoints[j].x
-                && snakePart.y === turningPoints[j].y
-            ) {
-                snakePart.direction = turningPoints[j].direction;
-
-                if (i === snake.length - 1) {
-                    shouldRemoveFirstTurningPoint = true;
-                }
-            }
-        }
-    }
-
-    if (shouldRemoveFirstTurningPoint) {
-        turningPoints.shift();
-    }
-
-    console.log(turningPoints.length)
-
-
-    for (let i = 0; i < snake.length; i++) {
-        if (snake[i].direction === "right") {
-            snake[i].y += 1;
-        } else if (snake[i].direction === "left") {
-            snake[i].y -= 1;
-        } else if (snake[i].direction === "up") {
-            snake[i].x -= 1;
-        } else if (snake[i].direction === "down") {
-            snake[i].x += 1;
-        }
-
-
-    }
-
-    // Check if snake has eaten the food
-    if (snakeHead.x === foodPosition.x && snakeHead.y === foodPosition.y) {
-        handleFoodEaten();
-    }
-}
-
-// clear prev snake on gameboard
+// clear gameboard
 function clearBoard() {
     for (let i = 0; i < gameBoard.length; i++) {
         for (let j = 0; j < gameBoard.length; j++) {
             gameBoard[i][j] = "";
         }
+    }
+}
+
+// Move snake
+function move() {
+    const newSnakeHead = { ...snakeHead };
+
+    // Snake move
+    switch (snakeHead.direction) {
+        case "up":
+            newSnakeHead.x--;
+            break;
+        case "down":
+            newSnakeHead.x++;
+            break;
+        case "right":
+            newSnakeHead.y++;
+            break;
+        case "left":
+            newSnakeHead.y--;
+            break;
+        default:
+            break;
+    }
+
+    // Check if snake has eaten the food
+    if (newSnakeHead.x === foodPosition.x && newSnakeHead.y === foodPosition.y) {
+        handleFoodEaten();
+    } else {
+        snake.pop();
+    }
+
+    // Add the new head to the snake
+    snake.unshift(newSnakeHead);
+
+    // Update old snakehead
+    snakeHead.x = newSnakeHead.x;
+    snakeHead.y = newSnakeHead.y;
+}
+
+// food eaten
+function handleFoodEaten() {
+    // Play food eaten sound
+    eatingSound.volume = .05;
+
+    if (userInteracted) {
+        eatingSound.play();
+    }
+
+    // Food disappear and add new food
+    addNewFood();
+
+    // Score++
+    updateScore();
+}
+
+function addNewFood() {
+    let newX = Math.floor(Math.random() * 10);
+    let newY = Math.floor(Math.random() * 10);
+
+    while (gameBoard[newX][newY]) {
+        newX = Math.floor(Math.random() * 10);
+        newY = Math.floor(Math.random() * 10);
+    }
+
+    foodPosition.x = newX;
+    foodPosition.y = newY;
+}
+
+function updateScore() {
+    score++;
+}
+
+function toggleSound() {
+    isMuted = !isMuted;
+
+    if (isMuted) {
+        volume.innerText = "🔇";
+        eatingSound.muted = true;
+        hitWallSound.muted = true;
+    } else {
+        volume.innerText = "🔊";
+        eatingSound.muted = false;
+        hitWallSound.muted = false;
     }
 }
 
@@ -181,10 +254,24 @@ function render() {
 
 //5) Handle the game over logic
 function checkGameOver() {
-    if (snakeHead.x < 0 || snakeHead.x > 9) {
+    // if snake hits the wall
+    if (snakeHead.x < 0 || snakeHead.x > 9 || snakeHead.y < 0 || snakeHead.y > 9) {
         gameOver = true;
-    } else if (snakeHead.y < 0 || snakeHead.y > 9) {
-        gameOver = true;
+
+    }
+
+    // if snake eats itself
+    for (let i = 1; i < snake.length; i++) {
+        if (snakeHead.x === snake[i].x && snakeHead.y === snake[i].y) {
+            gameOver = true;
+        }
+    }
+
+    if (gameOver) {
+        hitWallSound.volume = .05;
+        if (userInteracted) {
+            hitWallSound.play();
+        }
     }
 }
 
@@ -192,8 +279,11 @@ function checkGameOver() {
 // Keyboard event
 function setupKeyBoardEvt() {
     document.addEventListener("keydown", function (e) {
+        if (!gameStarted) return;
+
         let newDir = undefined;
         let isOppositeDir = false;
+
         switch (e.code) {
             case "KeyW":
             case "ArrowUp":
@@ -222,13 +312,6 @@ function setupKeyBoardEvt() {
             default:
                 break;
         }
-        if (newDir !== snakeHead.direction && !isOppositeDir) {
-            turningPoints.push({
-                x: snakeHead.x,
-                y: snakeHead.y,
-                direction: newDir,
-            });
-        }
 
         if (!isOppositeDir) {
             snakeHead.direction = newDir;
@@ -239,6 +322,8 @@ function setupKeyBoardEvt() {
 // Click event
 function setupClickEvt() {
     function changeDirectionOnClick(arrowDirection) {
+        if (!gameStarted) return;
+
         snakeHead.direction = arrowDirection;
     };
 
@@ -248,41 +333,7 @@ function setupClickEvt() {
     rightArrow.addEventListener("click", () => changeDirectionOnClick("right"));
 }
 
-// food eaten
-function handleFoodEaten() {
-    // Food disappear and add new food
-    addNewFood();
-
-    // Snake grows
-    snakeGrow();
-
-    // Score++
-    updateScore();
-}
-
-function addNewFood() {
-    let newX = Math.floor(Math.random() * 10);
-    let newY = Math.floor(Math.random() * 10);
-
-    while (gameBoard[newX][newY]) {
-        newX = Math.floor(Math.random() * 10);
-        newY = Math.floor(Math.random() * 10);
-    }
-
-    foodPosition.x = newX;
-    foodPosition.y = newY;
-}
-
-function snakeGrow() {
-    let newTailPosition = { x: snakeTail.x, y: snakeTail.y, direction: snakeTail.direction };
-    snake.push(newTailPosition);
-}
-
-function updateScore() {
-    score++;
-}
-
-//7) Create Reset functionality.
+//7) Create Reset functionality
 function endGame() {
     messageEl.style.visibility = "visible";
     restartBtnEl.style.visibility = "visible";
@@ -293,9 +344,8 @@ function endGame() {
 function restartGame() {
     // Reset Game state
     clearBoard();
-    snake = [{ x: Math.floor(Math.random() * 10), y: Math.floor(Math.random() * 10), direction: "right" }];
-    snakeHead = snake[0];
-    snakeTail = { x: snakeHead.x, y: snakeHead.y, direction: snakeHead.direction };
+    snake = getSnakeInitPosition();
+    snakeHead = { ...snake[0] };
     foodPosition = { x: Math.floor(Math.random() * 10), y: Math.floor(Math.random() * 10) };
     score = 0;
     gameOver = false;
@@ -305,5 +355,14 @@ function restartGame() {
     restartBtnEl.style.visibility = "hidden";
 
     render();
-    play();
+    playGame();
 }
+
+document.addEventListener("click", () => {
+    userInteracted = true;
+}, { once: true });
+document.addEventListener("keydown", () => {
+    userInteracted = true;
+}, { once: true });
+
+init();

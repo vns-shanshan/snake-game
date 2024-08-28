@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snake Game</title>
+    <link rel="icon" href="./assets/images/anaconda.png">
     <link rel="stylesheet" href="css/style.css">
     <script defer src="js/app.js"></script>
 </head>
@@ -21,17 +22,24 @@
     </header>
 
     <main>
-
         <section class="game-over-section">
             <span id="message">Game Over!</span>
-
             <button id="restart-btn">Restart</button>
-
         </section>
 
-        <table class="game-board">
-            <tbody id="game-board-body"></tbody>
-        </table>
+        <section class="game-board-container">
+            <table class="game-board">
+                <tbody id="game-board-body"></tbody>
+            </table>
+
+            <div class="start-page">
+                <div>
+                    <h1>Snake Game</h1>
+                    <button id="start-btn">Start</button>
+                </div>
+
+            </div>
+        </section>
 
         <section class="game-control">
             <div class="center">
