@@ -58,6 +58,10 @@ const leftArrow = document.getElementById("left-arrow");
 const rightArrow = document.getElementById("right-arrow");
 
 const volume = document.getElementById("volume");
+
+const bodyEl = document.querySelector("body");
+const mode = document.getElementById("mode");
+
 //3) Upon loading, the game state should be initialized, and a function should be called to render this game state.
 
 startBtnEl.addEventListener("click", () => {
@@ -366,6 +370,17 @@ function setupClickEvt() {
     leftArrow.addEventListener("click", (e) => changeDirectionOnClick(e, "left"));
     rightArrow.addEventListener("click", (e) => changeDirectionOnClick(e, "right"));
 }
+
+// light/dark mode toggle
+mode.addEventListener("click", () => {
+    if (mode.innerText === "🌙") {
+        mode.innerText = "☀️";
+    } else {
+        mode.innerText = "🌙"
+    };
+
+    bodyEl.classList.toggle("dark-mode");
+});
 
 //7) Create Reset functionality
 function endGame() {

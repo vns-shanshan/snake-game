@@ -2,12 +2,26 @@
     box-sizing: border-box;
 }
 
+/* -------------- Dark/Light Mode --------------------- */
+
+:root {
+    --bg-color: #E8B86D;
+    --text-color: #674636;
+}
+
+.dark-mode {
+    --bg-color: #674636;
+    --text-color: #E8B86D;
+}
+
+/*--------- -----------------------------------*/
+
 body {
     margin: 0 auto;
     min-height: 100dvh;
     font-family: system-ui, sans-serif;
     font-size: 24px;
-    background-color: #E8B86D;
+    background-color: var(--bg-color);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -20,8 +34,13 @@ header {
     justify-content: space-around;
 }
 
+#mode:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
 #score {
-    color: #674636;
+    color: var(--text-color);
     font-weight: 700;
     font-size: 1.5rem;
 }
@@ -50,7 +69,7 @@ main {
 }
 
 #message {
-    color: #674636;
+    color: var(--text-color);
     font-weight: 700;
 }
 
@@ -147,7 +166,7 @@ td {
 .direction-btn {
     width: 3.5rem;
     height: 3.5rem;
-    background-color: #674636;
+    background-color: var(--text-color);
     color: #FAEDCE;
     border: none;
     border-radius: 8px;
