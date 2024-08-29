@@ -41,8 +41,8 @@ let isMuted = false;
 let userInteracted = false;
 
 //1.5) Load sounds
-const eatingSound = new Audio("../assets/audio/eating.mp3");
-const hitWallSound = new Audio("../assets/audio/hit-wall.mp3");
+const eatingSound = new Audio("./assets/audio/eating.mp3");
+const hitWallSound = new Audio("./assets/audio/hit-wall.mp3");
 
 //2) Store cached element references.
 const startPageEl = document.querySelector(".start-page")
