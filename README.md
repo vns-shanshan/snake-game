@@ -7,8 +7,8 @@
 ### Description
 This is a simple Snake Game where the player controls a snake to move and eat apples on the screen. Each time the snake eats an apple, it grows longer. The objective is to avoid hitting the walls or snake's body.
 
-### Play the Game Using My Code
-- [Github - Snake Game](https://github.com/vns-shanshan/snake-game)
+### Play the Game
+- [Github - Snake Game](https://vns-shanshan.github.io/snake-game/)
 
 ### Features
 - **Snake Movement**: Control the snake using the `W`, `A`, `S`, `D` keys or the arrow keys. Mobile or tablet users can use on-screen buttons to control the snake.

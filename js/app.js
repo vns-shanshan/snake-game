@@ -280,6 +280,12 @@ function setupKeyBoardEvt() {
     document.addEventListener("keydown", function (e) {
         if (!gameStarted) return;
 
+        const allowedKeys = ["KeyW", "KeyA", "KeyS", "KeyD", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"]
+
+        if (allowedKeys.includes(e.code) === false) {
+            return;
+        }
+
         let newDir = undefined;
         let isOppositeDir = false;
 
@@ -320,16 +326,45 @@ function setupKeyBoardEvt() {
 
 // Click event
 function setupClickEvt() {
-    function changeDirectionOnClick(arrowDirection) {
+    function changeDirectionOnClick(e, arrowDirection) {
         if (!gameStarted) return;
 
-        snakeHead.direction = arrowDirection;
+        let isOppositeDir = false;
+
+        switch (e.target.id) {
+            case "up-arrow":
+                arrowDirection = "up";
+                isOppositeDir = snakeHead.direction === "down";
+                break;
+
+            case "down-arrow":
+                arrowDirection = "down";
+                isOppositeDir = snakeHead.direction === "up";
+                break;
+
+            case "left-arrow":
+                arrowDirection = "left";
+                isOppositeDir = snakeHead.direction === "right";
+                break;
+
+            case "right-arrow":
+                arrowDirection = "right";
+                isOppositeDir = snakeHead.direction === "left";
+                break;
+
+            default:
+                break;
+        }
+
+        if (!isOppositeDir) {
+            snakeHead.direction = arrowDirection;
+        }
     };
 
-    upArrow.addEventListener("click", () => changeDirectionOnClick("up"));
-    downArrow.addEventListener("click", () => changeDirectionOnClick("down"));
-    leftArrow.addEventListener("click", () => changeDirectionOnClick("left"));
-    rightArrow.addEventListener("click", () => changeDirectionOnClick("right"));
+    upArrow.addEventListener("click", (e) => changeDirectionOnClick(e, "up"));
+    downArrow.addEventListener("click", (e) => changeDirectionOnClick(e, "down"));
+    leftArrow.addEventListener("click", (e) => changeDirectionOnClick(e, "left"));
+    rightArrow.addEventListener("click", (e) => changeDirectionOnClick(e, "right"));
 }
 
 //7) Create Reset functionality
