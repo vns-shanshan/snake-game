@@ -4,11 +4,26 @@
 
 ### Game name: Snake Game
 
+### Getting Started:
+- [Github - Snake Game](https://vns-shanshan.github.io/snake-game/)
+
 ### Description:
 This is a simple Snake Game where the player controls a snake to move and eat apples on the screen. Each time the snake eats an apple, it grows longer. The objective is to avoid hitting the walls or snake's body.
 
-### Getting Started:
-- [Github - Snake Game](https://vns-shanshan.github.io/snake-game/)
+### User Requirements: 
+- Basic Requirements:
+    - As a user, I want to see a food appear on a random block in the game board.\
+    - As a user, I want to control the snake’s direction using arrow keys (up, down, left, right).
+    - As a user, I want the speed of the snake to be consistent.
+    - As a user, I want to see the snake grow longer when it eats food on the game board.
+    - As a user, I want to see the current score displayed.
+
+- Game Over Condition:
+    - As a user, I want to see the losing conditions, which are when the snake hits the wall or the snake eats itself.
+    - As a user, I want to see a “Game Over” message on screen when the losing conditions are met.
+
+- Restart Condition: 
+    - As a user, I want to see a restart button displayed under the “Game Over” message.
 
 ### Features:
 - **Snake Movement**: Control the snake using the `W`, `A`, `S`, `D` keys or the arrow keys. Mobile or tablet users can use on-screen buttons to control the snake.

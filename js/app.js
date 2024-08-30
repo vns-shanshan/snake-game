@@ -1,25 +1,3 @@
-// --------------- User Requirements ------------------ 
-/*
-Basic
-As a user, I want to see a food appear on a random block in the game board.
-As a user, I want to control the snake’s direction using arrow keys (up, down, left, right).
-As a user, I want the speed of the snake to be consistent.
-As a user, I want to see the snake grow longer when it eats food on the game board.
-As a user, I want to see the current score displayed.
-*/
-
-/*
-Game Over
-As a user, I want to see the losing conditions, which are when the snake hits the wall or the snake eats itself.
-As a user, I want to see a “Game Over” message on screen when the losing conditions are met.
-*/
-
-/*
-Restart
-As a user, I want to see a restart button displayed under the “Game Over” message.
-*/
-// ------------------- -- - ------------------------------
-
 //1) Define the required variables used to track the state of the game.
 let gameStarted = false;
 
@@ -63,7 +41,6 @@ const bodyEl = document.querySelector("body");
 const mode = document.getElementById("mode");
 
 //3) Upon loading, the game state should be initialized, and a function should be called to render this game state.
-
 startBtnEl.addEventListener("click", () => {
     gameStarted = true;
     startPageEl.classList.add("hidden");
@@ -82,7 +59,6 @@ function init() {
         playGame();
     }
 }
-
 
 function drawGameBoard() {
     for (let i = 0; i < gameBoard.length; i++) {
